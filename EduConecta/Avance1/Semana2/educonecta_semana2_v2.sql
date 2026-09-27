@@ -1,3 +1,9 @@
+/*
+    Avance 1, Semana 2 - Version 2
+    Cambios respecto a la v1: TABLA_MATRICULAS sin SCOPE IS (REF y DEREF)
+    y atributo cupo_maximo en TIPO_CURSO (lo necesita el Avance 2).
+*/
+
 CREATE TABLE TABLA_ESTUDIANTES OF TIPO_ESTUDIANTE (
     cod_estudiante PRIMARY KEY
 );
@@ -25,6 +31,7 @@ CREATE OR REPLACE TYPE TIPO_CURSO AS OBJECT (
     creditos            NUMBER(2),
     nivel               VARCHAR2(10 CHAR),
     modalidad           VARCHAR2(20 CHAR),
+    cupo_maximo         NUMBER(3),
     modulos             TIPO_MODULOS_TAB,
     prerrequisitos      TIPO_PRERREQUISITOS_TAB
 );
@@ -51,9 +58,7 @@ CREATE OR REPLACE TYPE TIPO_MATRICULA AS OBJECT (
 /
 
 CREATE TABLE TABLA_MATRICULAS OF TIPO_MATRICULA (
-    cod_matricula   PRIMARY KEY,
-    ref_estudiante  SCOPE IS TABLA_ESTUDIANTES,
-    ref_curso       SCOPE IS TABLA_CURSOS
+    cod_matricula   PRIMARY KEY
 );
 
 INSERT INTO TABLA_ESTUDIANTES VALUES (
@@ -86,7 +91,7 @@ INSERT INTO TABLA_ESTUDIANTES VALUES (
 COMMIT;
 
 INSERT INTO TABLA_CURSOS VALUES (
-    TIPO_CURSO('BDD-101', 'Fundamentos de Bases de Datos', 4, 'PREGRADO', 'VIRTUAL',
+    TIPO_CURSO('BDD-101', 'Fundamentos de Bases de Datos', 4, 'PREGRADO', 'VIRTUAL', 3,
         TIPO_MODULOS_TAB(
             TIPO_MODULO(1, 'Modelo entidad-relacion', 20, 'VIDEO'),
             TIPO_MODULO(2, 'Algebra relacional y SQL', 28, 'TALLER'),
@@ -96,7 +101,7 @@ INSERT INTO TABLA_CURSOS VALUES (
 );
 
 INSERT INTO TABLA_CURSOS VALUES (
-    TIPO_CURSO('PRG-102', 'Programacion Orientada a Objetos', 5, 'PREGRADO', 'ASINCRONICO',
+    TIPO_CURSO('PRG-102', 'Programacion Orientada a Objetos', 5, 'PREGRADO', 'ASINCRONICO', 2,
         TIPO_MODULOS_TAB(
             TIPO_MODULO(1, 'Clases, objetos y encapsulamiento', 24, 'VIDEO'),
             TIPO_MODULO(2, 'Herencia y polimorfismo', 30, 'TALLER')
@@ -105,7 +110,7 @@ INSERT INTO TABLA_CURSOS VALUES (
 );
 
 INSERT INTO TABLA_CURSOS VALUES (
-    TIPO_CURSO('BDD-301', 'Bases de Datos Objeto-Relacionales', 6, 'PREGRADO', 'VIRTUAL',
+    TIPO_CURSO('BDD-301', 'Bases de Datos Objeto-Relacionales', 6, 'PREGRADO', 'VIRTUAL', 3,
         TIPO_MODULOS_TAB(
             TIPO_MODULO(1, 'Tipos de objeto y constructores', 18, 'VIDEO'),
             TIPO_MODULO(2, 'Tablas de objetos y referencias REF', 22, 'TALLER'),
