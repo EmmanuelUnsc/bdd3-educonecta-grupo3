@@ -1,0 +1,55 @@
+use("educonecta")
+
+db.contenido_cursos.drop()
+db.foros_discusion.drop()
+
+// Puntos 5 y 6: contenido_cursos (cod_curso + nro_orden apuntan a un modulo de Oracle)
+db.contenido_cursos.insertMany([
+  { _id: "CNT-001", cod_curso: "BDD-301", nro_orden: 1, categoria: "Video-clase",
+    titulo: "Tipos de objeto y constructores",
+    especificaciones: { duracion_min: 45, resolucion: "1080p", en_vivo: true } },
+  { _id: "CNT-002", cod_curso: "BDD-101", nro_orden: 3, categoria: "Lectura",
+    titulo: "Normalizacion hasta 3FN",
+    especificaciones: { nro_paginas: 20, formato: "PDF" } },
+  { _id: "CNT-003", cod_curso: "BDD-301", nro_orden: 4, categoria: "Quiz",
+    titulo: "Consultas objeto-relacionales",
+    especificaciones: { nro_preguntas: 10, tiempo_limite_min: 20 } }
+])
+
+// Punto 6: foros_discusion (cod_estudiante es el id de TABLA_ESTUDIANTES en Oracle)
+db.foros_discusion.insertMany([
+  { _id: "RES-0001", contenido_id: "CNT-001", cod_estudiante: "EST-2026-001",
+    calificacion: 5, comentario: "Clase clara y bien explicada" },
+  { _id: "RES-0002", contenido_id: "CNT-003", cod_estudiante: "EST-2026-001",
+    calificacion: 3, comentario: "Las preguntas son dificiles para 20 minutos" },
+  { _id: "RES-0003", contenido_id: "CNT-002", cod_estudiante: "EST-2026-003",
+    calificacion: 5, comentario: "Lectura breve que aclara las formas normales" }
+])
+
+// Punto 7.1: promedio y total de resenas por contenido
+db.foros_discusion.aggregate([
+  { $group: { _id: "$contenido_id", promedio: { $avg: "$calificacion" }, total: { $sum: 1 } } }
+])
+/* Resultado:
+   { _id: 'CNT-001', promedio: 5, total: 1 }
+   { _id: 'CNT-003', promedio: 3, total: 1 }
+   { _id: 'CNT-002', promedio: 5, total: 1 }
+*/
+
+// Punto 7.2: promedio y total de resenas por estudiante
+db.foros_discusion.aggregate([
+  { $group: { _id: "$cod_estudiante", promedio: { $avg: "$calificacion" }, total: { $sum: 1 } } }
+])
+/* Resultado:
+   { _id: 'EST-2026-003', promedio: 5, total: 1 }
+   { _id: 'EST-2026-001', promedio: 4, total: 2 }
+*/
+
+// Punto 7.3: cantidad de contenidos por curso
+db.contenido_cursos.aggregate([
+  { $group: { _id: "$cod_curso", total_contenidos: { $sum: 1 } } }
+])
+/* Resultado:
+   { _id: 'BDD-101', total_contenidos: 1 }
+   { _id: 'BDD-301', total_contenidos: 2 }
+*/

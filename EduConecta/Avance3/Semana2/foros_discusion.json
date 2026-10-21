@@ -1,0 +1,21 @@
+[{
+  "_id": "RES-0001",
+  "contenido_id": "CNT-001",
+  "cod_estudiante": "EST-2026-001",
+  "calificacion": 5,
+  "comentario": "Clase clara y bien explicada"
+},
+{
+  "_id": "RES-0002",
+  "contenido_id": "CNT-003",
+  "cod_estudiante": "EST-2026-001",
+  "calificacion": 3,
+  "comentario": "Las preguntas son dificiles para 20 minutos"
+},
+{
+  "_id": "RES-0003",
+  "contenido_id": "CNT-002",
+  "cod_estudiante": "EST-2026-003",
+  "calificacion": 5,
+  "comentario": "Lectura breve que aclara las formas normales"
+}]

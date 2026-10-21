@@ -1,0 +1,34 @@
+[{
+  "_id": "CNT-001",
+  "cod_curso": "BDD-301",
+  "nro_orden": 1,
+  "categoria": "Video-clase",
+  "titulo": "Tipos de objeto y constructores",
+  "especificaciones": {
+    "duracion_min": 45,
+    "resolucion": "1080p",
+    "en_vivo": true
+  }
+},
+{
+  "_id": "CNT-002",
+  "cod_curso": "BDD-101",
+  "nro_orden": 3,
+  "categoria": "Lectura",
+  "titulo": "Normalizacion hasta 3FN",
+  "especificaciones": {
+    "nro_paginas": 20,
+    "formato": "PDF"
+  }
+},
+{
+  "_id": "CNT-003",
+  "cod_curso": "BDD-301",
+  "nro_orden": 4,
+  "categoria": "Quiz",
+  "titulo": "Consultas objeto-relacionales",
+  "especificaciones": {
+    "nro_preguntas": 10,
+    "tiempo_limite_min": 20
+  }
+}]
