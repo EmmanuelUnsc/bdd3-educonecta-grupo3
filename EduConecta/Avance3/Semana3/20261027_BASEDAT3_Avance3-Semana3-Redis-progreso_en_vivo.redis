@@ -1,0 +1,41 @@
+// Avance 3 - Semana 3 - Punto 9
+// Caso: EduConecta - Grupo 3
+// Componente de tiempo real progreso_en_vivo con Redis Streams (Redis Insight o redis-cli).
+// Stream: progreso_en_vivo:CNT-001 (video-clase en vivo de BDD-301, modulo 1, 45 min = 2700 s).
+// Productores: MAT-2026-0001 (EST-2026-001) y MAT-2026-0004 (EST-2026-004), las dos EN_CURSO en BDD-301.
+// Se usan dos ventanas (Redis Insight: CLI y Workbench, o dos redis-cli): primero el suscriptor, despues el productor.
+
+
+// ===== Productor: limpieza para poder repetir la demo =====
+DEL progreso_en_vivo:CNT-001
+
+
+// ===== Suscriptor: queda esperando eventos nuevos =====
+// $ = solo lo que llegue desde ahora; BLOCK 0 = espera sin limite de tiempo
+XREAD BLOCK 0 STREAMS progreso_en_vivo:CNT-001 $
+
+
+// ===== Productor: la video-clase publica el avance =====
+// porcentaje_visto = punto_pausa_seg / 2700 * 100
+XADD progreso_en_vivo:CNT-001 * cod_matricula MAT-2026-0001 porcentaje_visto 40 punto_pausa_seg 1080
+// -> en el suscriptor aparece este evento con el mismo ID y el XREAD termina
+
+// (Opcional) Suscriptor: seguir escuchando desde el ultimo ID recibido, reemplazando <ultimo-id>
+// XREAD BLOCK 0 STREAMS progreso_en_vivo:CNT-001 <ultimo-id>
+
+// ===== Productor: mas eventos de la misma clase =====
+XADD progreso_en_vivo:CNT-001 * cod_matricula MAT-2026-0004 porcentaje_visto 20 punto_pausa_seg 540
+XADD progreso_en_vivo:CNT-001 * cod_matricula MAT-2026-0001 porcentaje_visto 70 punto_pausa_seg 1890
+XADD progreso_en_vivo:CNT-001 * cod_matricula MAT-2026-0004 porcentaje_visto 55 punto_pausa_seg 1485
+XADD progreso_en_vivo:CNT-001 * cod_matricula MAT-2026-0001 porcentaje_visto 100 punto_pausa_seg 2700
+
+
+// ===== Verificacion (cualquier ventana) =====
+// Cantidad de eventos de la clase
+XLEN progreso_en_vivo:CNT-001
+
+// Historial completo: un suscriptor que se conecta tarde no pierde nada (con PUBLISH no pasaria)
+XRANGE progreso_en_vivo:CNT-001 - +
+
+// Ultimo evento publicado (punto de pausa mas reciente de la clase)
+XREVRANGE progreso_en_vivo:CNT-001 + - COUNT 1

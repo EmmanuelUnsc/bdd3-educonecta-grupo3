@@ -46,3 +46,27 @@ Las pruebas terminan con `ROLLBACK TO`, así que se pueden repetir. La secuencia
 - [ ] Subir la Semana 2: script + capturas de las pruebas del trigger.
 - [ ] Subir los scripts a Git.
 - [ ] Repartir la defensa (ver `01_Teoria_Informes/20260926_Guia_Estudio_Avance2_Trigger.md`).
+
+---
+
+# Avance 3 — MongoDB + Redis Streams
+
+| Carpeta | Contenido |
+|---|---|
+| `Avance3/Semana1/` | Documento de modelado (lógico, conceptual, físico) |
+| `Avance3/Semana2/` | Script MongoDB (`contenido_cursos`, `foros_discusion`, 3 agregaciones), export `.json` y verificación de ids en Oracle |
+| `Avance3/Semana3/` | Script Redis `progreso_en_vivo`, verificación Oracle de las matrículas del stream, capturas y salida real de la demo e informe final de integración (`docs/`, .odt/.pdf) |
+
+## Orden de ejecución
+
+1. Oracle ya cargado con los scripts del Avance 1 v2 y Avance 2.
+2. `Avance3/Semana2/20261020_BASEDAT3_Avance3-Semana2-Script-MongoDB.txt` en mongosh / Compass.
+3. `Avance3/Semana3/20261027_BASEDAT3_Avance3-Semana3-Redis-progreso_en_vivo.redis` en **dos** `redis-cli` (suscriptor primero, después productor).
+4. Opcional: los `.sql` de verificación de las Semanas 2 y 3 en SQL Developer (usuario EDUCONECTA).
+
+Redis local rápido: `docker run --rm -d --name redis-educonecta -p 6379:6379 redis:7` y `docker exec -it redis-educonecta redis-cli`.
+
+## Pendiente del equipo
+
+- [ ] Estudiar la guía de defensa (se compartió aparte por el grupo).
+- [ ] Ensayar la demo en vivo de Redis (pregunta 4).
